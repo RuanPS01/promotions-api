@@ -12,10 +12,11 @@ import java.util.List;
 public class AppInterceptorRegistry implements WebMvcConfigurer {
 
     private static final List<String> ENDPOINTS_PATTERN = Arrays.asList(
-            "/dm111promo/users**",
-            "/dm111promo/users/**",
-            "/dm111promo/products**",
-            "/dm111promo/products/**"
+            "/promotions**",
+            "/promotions/users**",
+            "/promotions/users/**",
+            "/promotions/products**",
+            "/promotions/products/**"
     );
 
     private final AuthInterceptor authInterceptor;

@@ -1,10 +1,8 @@
-# DM111
+# Promotions API
 
 ## Project
 
-The project was split in two repositories, the [current one](https://github.com/edilsonjustiniano/dm111) (a.k.a DM111)
-and the [DM111 Promo](https://github.com/edilsonjustiniano/dm111-promo) that will listen some notifications published
-by DM111 and apply some business logic based on the published/consumed events.
+This project it's a web API to make CRUD operations about Supermarket scenario;
 
 ## Overview
 
@@ -12,7 +10,8 @@ This repository contains the solution implemented by the DM111 discipline from t
 Cloud Development by Inatel.
 
 During the classes was implemented a web service to deal with a minimal structure of supermarket, i.e. The _CRUD_
-operations for **Products**, **Users** _(Client and Admin)_, **Shopping Lists**.
+operations for **Products**, **Users** _(Client and Admin)_, **Shopping Lists**. But now this API has CRUD operation for
+**Promotions** and others manipulations;
 
 To make these exposed APIs secure it was implemented an **Authentication** API as well using JWT token.
 
@@ -70,17 +69,21 @@ The following entities are stored on the Firebase:
   ]
 }
 ```
-
-### Firebase Cloud Message
-
-It was also implemented the Publisher to the **FCM** (_Firebase Cloud Message_) and whenever a user was created a message
-is published into the FCM topic.
-
-### Pub Sub
-
-One more integration added to the application was the **Pub Sub** that is composed by the topic and their subscriptions.
-Whenever a supermarket list has been created, updated or either deleted an event is published through this topic and the
-consumer services will be aware of the change. So, the consumer applications can apply their specific logics.
+> Promotion
+```json
+{
+  "id": "uuid",
+  "name": "name",
+  "starting": "starting_date",
+  "expiration": "expiration_date",
+  "products": [
+    {
+      "productId": "product_id",
+      "discount": 15
+    }
+  ]
+}
+```
 
 ## How to set up
 

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -20,10 +21,9 @@ import java.util.concurrent.ExecutionException;
 
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
-
     private static final Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
 
-    //@Value("${jwt.custom.issuer}")
+    @Value("${jwt.custom.issuer}")
     private String tokenIssuer;
 
     private final JwtParser jwtParser;
@@ -72,10 +72,6 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
         }
 
-        if (uri.startsWith("/promotions/products")) {
-            return true;
-        }
-
         return true;
     }
 
@@ -97,23 +93,31 @@ public class AuthInterceptor implements HandlerInterceptor {
                 throw new ApiException(AppErrorCode.INVALID_CREDENTIALS);
             }
 
-            if (tokenPayload.uri().startsWith("/dm111promo/products")) {
+            if (tokenPayload.uri().contains("/promotions/products")) {
                 if (tokenPayload.method().equals(HttpMethod.POST.name()) ||
                         tokenPayload.method().equals(HttpMethod.PUT.name()) ||
                         tokenPayload.method().equals(HttpMethod.DELETE.name()))
                     if (!user.getRole().equals("ADMIN")) {
                         throw new ApiException(AppErrorCode.PRODUCTS_OPERATION_NOT_ALLOWED);
                     }
-            } else {
-                System.out.println("promotions flow");
-//                if (tokenPayload.uri().startsWith("/dm111promo/promotions")) {
-//                    var splitUri = tokenPayload.uri().split("/");
-//                    var pathUserId = splitUri[3];
-//                    if (!user.getId().equals(pathUserId)) {
-//                        throw new ApiException(AppErrorCode.SUPERMARKET_LIST_OPERATION_NOT_ALLOWED);
-//                    }
-//                }
             }
+
+            if (tokenPayload.uri().contains("/promotions/promo")) {
+                if (tokenPayload.method().equals(HttpMethod.POST.name()) ||
+                        tokenPayload.method().equals(HttpMethod.PUT.name()) ||
+                        tokenPayload.method().equals(HttpMethod.DELETE.name()))
+                    if (!user.getRole().equals("ADMIN")) {
+                        throw new ApiException(AppErrorCode.PROMOTIONS_OPERATION_NOT_ALLOWED);
+                    }
+            }
+            if (tokenPayload.uri().contains("/supermarketlist")) {
+                var splitUri = tokenPayload.uri().split("/");
+                var pathUserId = splitUri[3];
+                if (!user.getId().equals(pathUserId)) {
+                    throw new ApiException(AppErrorCode.SUPERMARKET_LIST_OPERATION_NOT_ALLOWED);
+                }
+            }
+
         } catch (ExecutionException | InterruptedException e) {
             throw new ApiException(AppErrorCode.INVALID_CREDENTIALS);
         }

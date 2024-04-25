@@ -1,19 +1,33 @@
 package br.inatel.promotions.persistence.promotion;
 
+import java.util.Arrays;
+import java.util.List;
+
+//{
+//    "id": "uuid",
+//    "name": "name",
+//    "starting": "starting_date",
+//    "expiration": "expiration_date",
+//    "products": [
+//        {
+//            "productId": "product_id",
+//            "discount": 15
+//        }
+//    ]
+//}
 public class Promotion {
     private String id;
     private String name;
     private String starting;
     private String expiration;
-    private ProductDiscount[] products;
+    private List<ProductDiscount> products;
 
-    public Promotion(String id, String name, String starting, String expiration) {
+    public Promotion(String id, String name, String starting, String expiration, List<ProductDiscount> products) {
         this.id = id;
         this.name = name;
         this.starting = starting;
         this.expiration = expiration;
-        //TODO: corrigir set de products
-        //this.products = products;
+        this.products = products;
     }
 
     public String getId() {
@@ -33,6 +47,6 @@ public class Promotion {
     public String getExpiration() { return expiration; }
     public void setExpiration(String value) { this.expiration = value; }
 
-    public ProductDiscount[] getProducts() { return products; }
-    public void setProducts(ProductDiscount[] value) { this.products = value; }
+    public List<ProductDiscount> getProducts() { return products; }
+    public void setProducts(List<ProductDiscount> value) { this.products = value; }
 }

@@ -25,34 +25,49 @@ public class PromotionController {
         this.service = service;
     }
 
-    @GetMapping("")
+    @GetMapping("/promo")
     public ResponseEntity<List<Promotion>> getPromotions() throws ApiException {
         log.debug("Getting all promotions");
         var promotions = service.searchPromotions();
         return ResponseEntity.ok(promotions);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/promo/valid")
+    public ResponseEntity<List<Promotion>> getValidPromotions() throws ApiException {
+        log.debug("Getting valid promotions");
+        var promotions = service.searchValidPromotions();
+        return ResponseEntity.ok(promotions);
+    }
+
+    @GetMapping("/promo/{id}")
     public ResponseEntity<Promotion> getPromotion(@PathVariable("id") String id) throws ApiException {
         log.debug("Getting the product by id: " + id);
         var promotion = service.searchPromotion(id);
         return ResponseEntity.ok(promotion);
     }
 
-    @PostMapping("")
+    @GetMapping("/promo/valid/{id}")
+    public ResponseEntity<Promotion> getValidPromotion(@PathVariable("id") String id) throws ApiException {
+        log.debug("Getting valid promotion");
+        var promotion = service.searchValidPromotion(id);
+        return ResponseEntity.ok(promotion);
+    }
+
+    @PostMapping("/promo")
     public ResponseEntity<Promotion> postPromotion(@RequestBody PromotionRequest request) {
+        log.debug("Creating a promotion");
         var promotion = service.createPromotion(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(promotion);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/promo/{id}")
     public ResponseEntity<Promotion> putPromotion(@PathVariable("id") String id,
                                               @RequestBody PromotionRequest request) throws ApiException {
         var promotion = service.updatePromotion(id, request);
         return ResponseEntity.ok(promotion);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/promo/{id}")
     public ResponseEntity<?> deletePromotion(@PathVariable("id")String id) throws ApiException {
         service.removePromotion(id);
         return ResponseEntity.noContent().build();
