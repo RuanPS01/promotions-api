@@ -1,0 +1,537 @@
+{
+	"info": {
+		"_postman_id": "551fe04c-32fd-4f90-9e35-219c6cbb7b54",
+		"name": "DM111-Promos-Ruan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5272549",
+		"_collection_link": "https://grey-space-800931.postman.co/workspace/Ruanps-Workspace~b9020c5b-0f39-4b43-83b1-fe5a11eadd3f/collection/5272549-551fe04c-32fd-4f90-9e35-219c6cbb7b54?action=share&source=collection_link&creator=5272549"
+	},
+	"item": [
+		{
+			"name": "1º - Create ADMIN User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Fulano\",\r\n  \"email\": \"fulano@yopmail.com\",\r\n  \"password\": \"1234\",\r\n  \"role\": \"ADMIN\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2º - Create CLIENT User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ciclano\",\r\n  \"email\": \"ciclano@yopmail.com\",\r\n  \"password\": \"321\",\r\n  \"role\": \"CLIENT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3º - Auth with ADMIN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+							"pm.collectionVariables.set(\"userId\", jsonData.userId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"fulano@yopmail.com\",\r\n  \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4º - Create Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"productId\", jsonData.id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Detergente\",\r\n   \"brand\": \"Tia da esquina\",\r\n   \"unit\": \"ml\",\r\n   \"amount\": \"500\",\r\n   \"price\": 2.5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5º - Create Promotion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"promotionId\", jsonData.id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Promoção relâmpago\",\r\n   \"starting\": \"24/04/2024\",\r\n   \"expiration\": \"01/05/2024\",\r\n   \"products\": [\r\n       {\r\n           \"productId\": \"{{productId}}\",\r\n           \"discount\": 15\r\n       }\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/promo",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"promo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6º - Update Promotion",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Promoção relâmpago [updated]\",\r\n   \"starting\": \"24/04/2024\",\r\n   \"expiration\": \"08/05/2024\",\r\n    \"products\": [\r\n       {\r\n           \"productId\": \"{{productId}}\",\r\n           \"discount\": 18\r\n       }\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/promo/{{promotionId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"promo",
+						"{{promotionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7º - Find all Promotions",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/promotions/promo",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"promo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8º - Find one Promotion",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/promotions/promo/{{promotionId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"promo",
+						"{{promotionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9º - Auth with CLIENT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+							"pm.collectionVariables.set(\"userId\", jsonData.userId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"ciclano@yopmail.com\",\r\n  \"password\": \"321\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10º - Create SupermarketList",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Materiais e limpeza\",\r\n   \"products\": [\r\n    \"{{productId}}\"\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/users/{{userId}}/supermarketlist",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"users",
+						"{{userId}}",
+						"supermarketlist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "11º - Find valid promotions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ruan\",\r\n  \"email\": \"ruan@teste.com\",\r\n  \"password\": \"123\",\r\n  \"role\": \"ADMIN\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/promo/valid",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"promo",
+						"valid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8º - Find one valid Promotion",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/promotions/promo/valid/{{promotionId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"promo",
+						"valid",
+						"{{promotionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "13º - Auth with ADMIN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+							"pm.collectionVariables.set(\"userId\", jsonData.userId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"fulano@yopmail.com\",\r\n  \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/promotions/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "14º - Delete Promotion",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/promotions/{{promotionId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"promotions",
+						"{{promotionId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "productId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "promotionId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
